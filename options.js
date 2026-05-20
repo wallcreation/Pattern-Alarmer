@@ -4,23 +4,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const patternList = document.getElementById("pattern-list");
   const newPatternInput = document.getElementById("new-pattern");
   const addPatternBtn = document.getElementById("add-pattern");
-  const audioUpload = document.getElementById("audio-upload");
-  const clearAudioBtn = document.getElementById("clear-audio");
-  const audioPreview = document.getElementById("audio-preview");
 
-  // Migration vers async/await
-  const data = await chrome.storage.local.get(["patterns", "ringtone"]);
+  // Chargement initial des patterns uniquement
+  const data = await chrome.storage.local.get(["patterns"]);
   console.log("[options.js] Données chargées:", data);
 
   const patterns = data.patterns || [];
   console.log("[options.js] Patterns chargés:", patterns);
   renderPatterns(patterns);
-
-  if (data.ringtone) {
-    console.log("[options.js] Ringtone personnalisé trouvé");
-    audioPreview.src = data.ringtone;
-    audioPreview.style.display = "block";
-  }
 
   function renderPatterns(patterns) {
     console.log("[options.js] Rendu des patterns:", patterns);
@@ -66,36 +57,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("[options.js] Pattern déjà existant");
       }
     }
-  });
-
-  audioUpload.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    console.log(
-      "[options.js] Upload audio:",
-      file ? file.name : "aucun fichier",
-    );
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64Audio = event.target.result;
-        console.log(
-          "[options.js] Audio converti en base64, taille:",
-          base64Audio.length,
-        );
-        chrome.storage.local.set({ ringtone: base64Audio });
-        audioPreview.src = base64Audio;
-        audioPreview.style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
-  clearAudioBtn.addEventListener("click", async () => {
-    console.log("[options.js] Réinitialisation ringtone");
-    await chrome.storage.local.remove("ringtone");
-    audioPreview.src = "";
-    audioPreview.style.display = "none";
-    audioUpload.value = "";
   });
 });

@@ -1,146 +1,139 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Options - Pattern Alarmer</title>
-        <style>
-            :root {
-                --bg: #121212;
-                --surface: #1e1e1e;
-                --cyan: #00bcd4;
-                --cyan-hover: #0097a7;
-                --text: #e0e0e0;
-                --danger: #cf6679;
-            }
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
-            body {
-                background-color: var(--bg);
-                color: var(--text);
-                font-family: system-ui, sans-serif;
-                line-height: 1.4;
-                padding: 24px;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            h1 {
-                font-size: 24px;
-                margin-bottom: 24px;
-                font-weight: 500;
-            }
-            h2 {
-                color: var(--cyan);
-                font-size: 16px;
-                margin-bottom: 12px;
-                text-transform: uppercase;
-            }
-            .section {
-                background: var(--surface);
-                padding: 20px;
-                margin-bottom: 24px;
-                border-radius: 8px;
-            }
-            .flex-row {
-                display: flex;
-                gap: 8px;
-                margin-bottom: 16px;
-            }
-            input[type="text"],
-            input[type="file"] {
-                flex: 1;
-                padding: 10px;
-                background: var(--bg);
-                border: 1px solid #333;
-                color: var(--text);
-                border-radius: 4px;
-                font-family: monospace;
-            }
-            input[type="text"]:focus {
-                outline: none;
-                border-color: var(--cyan);
-            }
-            button {
-                background-color: var(--cyan);
-                color: var(--bg);
-                border: none;
-                padding: 10px 16px;
-                cursor: pointer;
-                font-weight: bold;
-                border-radius: 4px;
-            }
-            button:hover {
-                background-color: var(--cyan-hover);
-            }
-            button.btn-danger {
-                background-color: transparent;
-                border: 1px solid var(--danger);
-                color: var(--danger);
-            }
-            button.btn-danger:hover {
-                background-color: var(--danger);
-                color: var(--bg);
-            }
-            .pattern-list {
-                list-style: none;
-            }
-            .pattern-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 12px;
-                background: var(--bg);
-                margin-bottom: 8px;
-                border-radius: 4px;
-                font-family: monospace;
-                border: 1px solid #2a2a2a;
-            }
-            .delete-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-            #audio-preview {
-                width: 100%;
-                margin-top: 12px;
-                border-radius: 4px;
-            }
-            .help-text {
-                font-size: 13px;
-                color: #888;
-                margin-bottom: 12px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Paramètres</h1>
-        <div class="section">
-            <h2>Patterns d'URL</h2>
-            <div class="flex-row">
-                <input
-                    type="text"
-                    id="new-pattern"
-                    placeholder="ex: *://*.github.com/*"
-                />
-                <button id="add-pattern">Ajouter</button>
-            </div>
-            <ul class="pattern-list" id="pattern-list"></ul>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Options - Pattern Alarmer</title>
+    <style>
+        :root {
+            --bg: #121212;
+            --surface: #1e1e1e;
+            --cyan: #00bcd4;
+            --cyan-hover: #0097a7;
+            --text: #e0e0e0;
+            --danger: #cf6679;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.4;
+            padding: 24px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        h2 {
+            color: var(--cyan);
+            font-size: 16px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            background: var(--surface);
+            padding: 20px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            background: var(--bg);
+            border: 1px solid #333;
+            color: var(--text);
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--cyan);
+        }
+
+        button {
+            background-color: var(--cyan);
+            color: var(--bg);
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--cyan-hover);
+        }
+
+        button.btn-danger {
+            background-color: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        button.btn-danger:hover {
+            background-color: var(--danger);
+            color: var(--bg);
+        }
+
+        .pattern-list {
+            list-style: none;
+        }
+
+        .pattern-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg);
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            border: 1px solid #2a2a2a;
+        }
+
+        .delete-btn {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Paramètres de l'extension</h1>
+
+    <div class="section">
+        <h2>Patterns d'URL</h2>
+        <div class="flex-row">
+            <input type="text" id="new-pattern" placeholder="ex: google.com/*">
+            <button id="add-pattern">Ajouter</button>
         </div>
-        <div class="section">
-            <h2>Sonnerie personnalisée</h2>
-            <p class="help-text">
-                Sélectionnez un fichier .mp3. S'il est vide, le son par défaut
-                sera utilisé.
-            </p>
-            <div class="flex-row">
-                <input type="file" id="audio-upload" accept="audio/*" />
-                <button id="clear-audio" class="btn-danger">
-                    Réinitialiser
-                </button>
-            </div>
-            <audio id="audio-preview" controls style="display: none"></audio>
-        </div>
-        <script src="options.js"></script>
-    </body>
+        <ul class="pattern-list" id="pattern-list"></ul>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+
 </html>

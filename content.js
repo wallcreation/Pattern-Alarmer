@@ -83,7 +83,7 @@ function showStopButton() {
     z-index: 2147483647; background-color: #00bcd4; color: #121212;
     border: none; padding: 12px 24px; font-size: 16px; font-weight: bold;
     font-family: system-ui, sans-serif; border-radius: 6px; cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3); transition: background-color 0.2s, transform 0.1s;
+    box-shadow: 0 4px 10px rgba(0, 188, 212, 0.3); transition: background-color 0.5s, transform 0.5s;
   `;
 
   btn.onmouseover = () => (btn.style.backgroundColor = "#0097a7");
