@@ -38,14 +38,17 @@ async function closeOffscreenDocument() {
   }
 }
 
+// Gestionnaire de messages nettoyé de tout stockage
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === "found") {
     console.log("[background.js] Pattern trouvé, URL:", message.page_url);
 
-    // On lance directement l'offscreen sans passer par le storage
-    setupOffscreenDocument("offscreen.html").then(() => {
-      chrome.runtime.sendMessage({ command: "play_audio" });
-    });
+    // Déclenchement direct du document offscreen
+    setupOffscreenDocument("offscreen.html")
+      .then(() => {
+        chrome.runtime.sendMessage({ command: "play_audio" });
+      })
+      .catch((err) => console.error("[background.js] Erreur offscreen:", err));
 
     if (sender.tab && sender.tab.id) {
       chrome.tabs
