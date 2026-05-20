@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Pattern Alarmer",
+  "version": "1.0",
+  "description": "Joue une sonnerie quand l'URL correspond à un pattern précis.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "action": {
+    "default_title": "Ouvrir les options"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["audio.mp3"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
