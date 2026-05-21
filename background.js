@@ -1,3 +1,31 @@
+// Initialisation des patterns et du mode audio par défaut à l'installation
+chrome.runtime.onInstalled.addListener(async () => {
+  console.log("[background.js] Extension installée ou mise à jour");
+
+  const data = await chrome.storage.local.get(["patterns", "audioMode"]);
+
+  // Si aucun pattern n'est encore enregistré, on met les valeurs par défaut
+  if (!data.patterns || data.patterns.length === 0) {
+    const defaultPatterns = [
+      "textspins.com/*/gestopt-gesprek/*",
+      "textspins.com/*gesprek/*",
+      "textspins.com/fr/conversations",
+    ];
+
+    await chrome.storage.local.set({ patterns: defaultPatterns });
+    console.log(
+      "[background.js] Patterns par défaut initialisés :",
+      defaultPatterns,
+    );
+  }
+
+  // Si aucun mode audio n'est défini, on met "soft" par défaut
+  if (!data.audioMode) {
+    await chrome.storage.local.set({ audioMode: "soft" });
+    console.log("[background.js] Mode audio par défaut initialisé: soft");
+  }
+});
+
 chrome.action.onClicked.addListener(() => {
   chrome.runtime.openOptionsPage();
 });
@@ -39,14 +67,23 @@ async function closeOffscreenDocument() {
 }
 
 // Gestionnaire de messages nettoyé de tout stockage
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.command === "found") {
     console.log("[background.js] Pattern trouvé, URL:", message.page_url);
+
+    // Récupération du mode audio sélectionné
+    const data = await chrome.storage.local.get(["audioMode"]);
+    const audioMode = data.audioMode || "soft";
+    const audioFile = audioMode === "hard" ? "audios/hard.wav" : "audios/soft.mp3";
+    console.log("[background.js] Fichier audio sélectionné:", audioFile);
 
     // Déclenchement direct du document offscreen
     setupOffscreenDocument("offscreen.html")
       .then(() => {
-        chrome.runtime.sendMessage({ command: "play_audio" });
+        chrome.runtime.sendMessage({
+          command: "play_audio",
+          audioFile: audioFile,
+        });
       })
       .catch((err) => console.error("[background.js] Erreur offscreen:", err));
 
