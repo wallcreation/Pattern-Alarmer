@@ -51,7 +51,8 @@ function handleMatches() {
           console.error("[content.js] Erreur envoi message background"),
         );
     } else {
-      console.log("[content.js] Aucun pattern correspondant");
+      console.log("[content.js] Aucun pattern correspondant arrêt de sonnerie");
+      chrome.runtime.sendMessage({ command: "stop_alarm" });
     }
   });
 }
